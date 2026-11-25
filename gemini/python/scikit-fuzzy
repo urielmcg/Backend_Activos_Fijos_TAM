@@ -1,0 +1,20 @@
+import numpy as np
+import skfuzzy as ctrl
+
+def calcular_salud_fuzzy(activo):
+    # 1. Antecedentes (Inputs)
+    uso = ctrl.Antecedent(np.arange(0, 100, 1), 'uso') # % de vida consumida
+    clima = ctrl.Antecedent(np.arange(0, 50, 1), 'temperatura') # De la tabla Ubicacion
+    
+    # 2. Consecuente (Output)
+    salud = ctrl.Consequent(np.arange(0, 100, 1), 'salud')
+
+    # 3. Membresía (Ejemplo simplificado)
+    uso['nuevo'] = ctrl.trimf(uso.universe, [0, 0, 50])
+    uso['viejo'] = ctrl.trimf(uso.universe, [40, 100, 100])
+    
+    # Aquí aplicarías las reglas de TAMEP:
+    # REGLA: SI uso es VIEJO y temperatura es ALTA -> salud es BAJA
+    # ... (código de simulación) ...
+    
+    return resultado_fuzzy

@@ -1,0 +1,70 @@
+erDiagram
+    %% =================================================
+    %% 1. ESTRUCTURA ORGANIZACIONAL (TAMEP)
+    %% =================================================
+    GERENCIA ||--o{ USUARIO : "pertenece"
+    CARGO ||--o{ USUARIO : "asigna"
+    
+    %% =================================================
+    %% 2. GESTIÓN DE ACTIVOS (MÓDULOS 1 Y 2)
+    %% =================================================
+    REGIONAL ||--o{ UBICACION : "contiene"
+    UBICACION ||--o{ ACTIVO : "alberga"
+    ACTIVO ||--o{ DESIGNACION : "historial_poseedores"
+    USUARIO ||--o{ DESIGNACION : "responsable_de"
+
+    %% =================================================
+    %% 3. SOPORTE TÉCNICO E HISTORIAL (NÚCLEO DEL SISTEMA)
+    %% =================================================
+    ACTIVO ||--o{ SOLICITUD_SERVICIO : "genera"
+    USUARIO ||--o{ SOLICITUD_SERVICIO : "reporta"
+    
+    SOLICITUD_SERVICIO ||--o| INTERVENCION : "se_resuelve_con"
+    USUARIO ||--o{ INTERVENCION : "tecnico_ejecuta"
+    
+    INTERVENCION ||--o{ FALLAS : "identifica"
+    INTERVENCION ||--o{ INTERVENCION_IMAGENES : "evidencia"
+
+    %% =================================================
+    %% 4. MOTOR DE INTELIGENCIA ARTIFICIAL
+    %% =================================================
+    ACTIVO ||--|| METRICAS_IA : "tiene_analisis"
+    INTERVENCION ||--o{ METRICAS_IA : "aporta_datos_falla"
+    UBICACION ||--o{ METRICAS_IA : "aporta_datos_clima"
+
+    %% =================================================
+    %% DETALLE DE ATRIBUTOS CLAVE
+    %% =================================================
+
+    ACTIVO {
+        bigint id PK
+        string codigo_tamep "QR"
+        string serie UK
+        string nombre
+        enum estado "Operativo/Crítico"
+    }
+
+    SOLICITUD_SERVICIO {
+        bigint id PK
+        datetime fecha_solicitud
+        string tipo "Falla/Soporte"
+        string prioridad
+        string estado_ticket "Pendiente/Cerrado"
+    }
+
+    INTERVENCION {
+        bigint id PK
+        datetime fecha_inicio
+        datetime fecha_fin
+        text trabajo_realizado "Solución Aplicada"
+        decimal costo_bs
+        string tipo_mantenimiento "Prev/Corr"
+    }
+
+    METRICAS_IA {
+        bigint id PK
+        float mtbf "Media mensual/total"
+        float rul "Vida útil (Fuzzy)"
+        float score_falla "Probabilidad (RF)"
+        string resumen_ia "Diagnóstico"
+    }

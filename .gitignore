@@ -1,0 +1,35 @@
+# Python / Django
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.venv-win/
+venv/
+env/
+*.sqlite3
+db.sqlite3
+
+# Django generated
+/static_collected/
+/media/
+/staticfiles/
+/tmp/
+*.log
+
+# Env (secrets)
+.env
+.env.local
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Large binaries
+*.docx
+*.pptx
+*.sql
+~$*
+
+*.zip

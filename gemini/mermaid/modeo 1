@@ -1,0 +1,88 @@
+erDiagram
+    %% =================================================
+    %% ESTRUCTURA ORGANIZACIONAL Y SEGURIDAD
+    %% =================================================
+    GERENCIA ||--o{ USUARIO : "pertenece"
+    CARGO ||--o{ USUARIO : "asigna"
+    
+    USUARIO ||--o{ DESIGNACION : "recibe_activo"
+    USUARIO ||--o{ SOLICITUD_SERVICIO : "reporta"
+    USUARIO ||--o{ INTERVENCION : "tecnico_ejecuta"
+    USUARIO ||--o{ AUDITORIA : "realiza_accion"
+
+    %% =================================================
+    %% INFRAESTRUCTURA Y UBICACIÓN
+    %% =================================================
+    REGIONAL ||--o{ UBICACION : "contiene"
+    UBICACION ||--o{ ACTIVO : "alberga"
+
+    %% =================================================
+    %% MÓDULO 1 Y 2: REGISTRO Y DESIGNACIÓN (SEPARADOS)
+    %% =================================================
+    ACTIVO ||--o{ DESIGNACION : "se_asigna_en"
+    ACTIVO ||--o{ AUDITORIA : "trazabilidad"
+    
+    %% =================================================
+    %% MÓDULO 3: INFORMÁTICA Y MANTENIMIENTO
+    %% =================================================
+    ACTIVO ||--o{ SOLICITUD_SERVICIO : "tiene"
+    SOLICITUD_SERVICIO ||--o| INTERVENCION : "genera"
+    INTERVENCION ||--o{ INTERVENCION_IMAGENES : "respalda"
+    INTERVENCION ||--o{ FALLAS : "registra"
+    ACTIVO ||--o{ FALLAS : "sufre"
+
+    %% =================================================
+    %% MÓDULO IA: PROCESAMIENTO PREDICTIVO
+    %% =================================================
+    ACTIVO ||--|| METRICAS_IA : "calcula"
+    INTERVENCION ||--o{ METRICAS_IA : "nutre_MTBF"
+    FALLAS ||--o{ METRICAS_IA : "nutre_RF_Fuzzy"
+
+    %% =================================================
+    %% DEFINICIÓN DE CAMPOS CLAVE
+    %% =================================================
+
+    ACTIVO {
+        bigint id PK
+        string codigo_tamep "Para QR"
+        string numero_serie UK
+        string nombre
+        date fecha_adquisicion
+        boolean disponible "Indica si puede designarse"
+    }
+
+    DESIGNACION {
+        bigint id PK
+        datetime fecha_inicio
+        datetime fecha_fin
+        boolean activa "Si el usuario lo tiene ahora"
+    }
+
+    SOLICITUD_SERVICIO {
+        bigint id PK
+        string tipo_solicitud "Falla/Soporte"
+        string estado "Pendiente/Cerrada"
+        string prioridad
+    }
+
+    INTERVENCION {
+        bigint id PK
+        string tipo_mantenimiento "Prev/Corr"
+        datetime fecha_inicio
+        datetime fecha_fin
+        decimal costo
+    }
+
+    FALLAS {
+        bigint id PK
+        string tipo_falla "Hardware/Software"
+        text solucion_aplicada
+    }
+
+    METRICAS_IA {
+        bigint id PK
+        float mtbf "Media entre fallas"
+        float rul "Vida útil restante"
+        float prob_falla_rf "Random Forest"
+        float salud_fuzzy "Lógica Difusa"
+    }

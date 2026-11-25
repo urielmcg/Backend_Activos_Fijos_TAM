@@ -1,0 +1,33 @@
+<div class="card">
+    <div class="card-header">
+        <h3>Hoja de Vida: {{ activo.codigo_tamep }}</h3>
+    </div>
+    <div class="card-body">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Tipo de Servicio</th>
+                    <th>Falla Reportada</th>
+                    <th>Trabajo Realizado (Solución)</th>
+                    <th>Técnico</th>
+                    <th>Costo</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for registro in historial %}
+                <tr>
+                    <td>{{ registro.fecha_inicio|date:"d/m/Y" }}</td>
+                    <td>{{ registro.get_tipo_mant_display }}</td>
+                    <td>{{ registro.solicitud.descripcion_problema }}</td>
+                    <td>{{ registro.trabajo_realizado }}</td>
+                    <td>{{ registro.tecnico.get_full_name }}</td>
+                    <td>{{ registro.costo }} Bs.</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="6">No hay registros para este equipo.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        @page { size: letter; margin: 1.5cm; }
+        body { font-family: 'Helvetica', sans-serif; font-size: 11px; color: #333; }
+        .header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 10px; }
+        .info-user { margin-bottom: 20px; width: 100%; }
+        .info-user td { padding: 3px; }
+        .tabla-activos { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .tabla-activos th, .tabla-activos td { border: 1px solid #000; padding: 6px; text-align: left; }
+        .tabla-activos th { background-color: #eee; text-transform: uppercase; }
+        .clausula { margin-top: 30px; text-align: justify; font-style: italic; border: 1px solid #ccc; padding: 10px; }
+        .firmas { margin-top: 80px; width: 100%; }
+        .firmas td { text-align: center; width: 50%; }
+        .linea-firma { border-top: 1px solid #000; width: 200px; margin: 0 auto; padding-top: 5px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2 style="margin:0;">{{ empresa }}</h2>
+        <h3 style="margin:5px;">ACTA DE ASIGNACIÓN INDIVIDUAL DE ACTIVOS FIJOS</h3>
+        <p>Documento de Responsabilidad y Custodia</p>
+    </div>
+
+    <table class="info-user">
+        <tr>
+            <td><strong>FUNCIONARIO:</strong> {{ funcionario.get_full_name|upper }}</td>
+            <td><strong>C.I.:</strong> {{ perfil.ci }} {{ perfil.extension }}</td>
+        </tr>
+        <tr>
+            <td><strong>CARGO:</strong> {{ perfil.cargo.nombre }}</td>
+            <td><strong>REGIONAL:</strong> {{ perfil.regional.nombre }}</td>
+        </tr>
+    </table>
+
+    <table class="tabla-activos">
+        <thead>
+            <tr>
+                <th>Código Tamep</th>
+                <th>Descripción del Activo</th>
+                <th>Serie</th>
+                <th>Estado</th>
+                <th>Ubicación</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in asignaciones %}
+            <tr>
+                <td>{{ item.activo.codigo_tamep }}</td>
+                <td>{{ item.activo.nombre_especifico }}</td>
+                <td>{{ item.activo.serie }}</td>
+                <td>{{ item.activo.estado_actual }}</td>
+                <td>{{ item.ubicacion.nombre_sala }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5" style="text-align:center;">No tiene activos asignados actualmente.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="clausula">
+        <strong>COMPROMISO DE CUSTODIA:</strong> Por la presente, el funcionario declara haber recibido 
+        los activos descritos en el presente documento en las condiciones señaladas. Se compromete 
+        a su custodia, cuidado y buen uso, asumiendo responsabilidad por pérdida o daño causado 
+        por negligencia, de acuerdo a las normativas vigentes de la Empresa Pública Tamep.
+    </div>
+
+    <table class="firmas">
+        <tr>
+            <td>
+                <div class="linea-firma">Entregué Conforme<br><small>Responsable de Activos Fijos</small></div>
+            </td>
+            <td>
+                <div class="linea-firma">Recibí Conforme<br><small>{{ funcionario.get_full_name }}</small></div>
+            </td>
+        </tr>
+    </table>
+    
+    <div style="position: absolute; bottom: 0; width: 100%; text-align: right;">
+        Fecha de emisión: {{ fecha_hoy }}
+    </div>
+</body>
+</html>
